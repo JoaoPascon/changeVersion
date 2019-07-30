@@ -71,13 +71,11 @@ function writeConstants(constantsData, newVersion){
     let updateConstants = constantsData.replace(
         'SYNC_VERSION = ' + '\"' + arg.currentVersion + '\"', 
         'SYNC_VERSION = ' + '\"' + newVersion + '\"')
-    fs.writeFile('./files/constants.java', updateConstants, (error) => {
+    fs.writeFile(path.constantsJava, updateConstants, (error) => {
         if(error) throw error
         console.log("Constants.java atualizado com sucesso!")
     })
 }
-
-//'SYNC_VERSION = ' + '\"' + '1.0.0' + '\"', 'SYNC_VERSION = ' + '\"' + '1.0.1' + '\"')
 
 function readFile(path) {
     return fs.readFileSync(path, 'utf-8');
