@@ -1,17 +1,18 @@
+const path = require('./paths').paths
 const fs = require("fs");
 const argv = require("yargs");
 const arg = argv.demand(['newVersion', 'currentVersion']).argv;
 
 
 function updatePackageJson() {
-    let dataJson = JSON.parse(readFile('./files/package.json'));
+    let dataJson = JSON.parse(readFile(path.packageJson));
     writePackageJson(dataJson, arg.newVersion);
 }
 
 function writePackageJson(objectJson, newVersion) {
     objectJson.version = newVersion.toString();
     let textJson = JSON.stringify(objectJson);
-    fs.writeFile('./files/package.json', textJson, (error) => {
+    fs.writeFile(path.packageJson, textJson, (error) => {
         if (error)
             throw error;
         console.log("Package atualizado com sucesso!");
@@ -19,13 +20,13 @@ function writePackageJson(objectJson, newVersion) {
 }
 
 function updatePomXml() {
-    let data = readFile('./files/pom.xml');
+    let data = readFile(path.pomXml);
     writePomXml(data, arg.newVersion);
 }
 
 function writePomXml(pom, newVersion) {
     let pomUpdate = pom.replace('<version>'+arg.currentVersion+'</version>', '<version>' + newVersion + '</version>');
-    fs.writeFile('./files/pom.xml', pomUpdate, (error) => {
+    fs.writeFile(path.pomXml, pomUpdate, (error) => {
         if (error)
             throw error;
         console.log("Pom atualizado com sucesso!");
@@ -33,21 +34,21 @@ function writePomXml(pom, newVersion) {
 }
 
 function updateApplicationYml() {
-    let data = readFile('./files/application.yml');
+    let data = readFile(path.applicationYml);
     writeApplicationYml(data, arg.newVersion);
 }
 
 function writeApplicationYml(yml, newVersion) {
     let updateYml = yml.replace('version: ' + arg.currentVersion, 'version: ' + newVersion);
-    fs.writeFile('./files/application.yml', updateYml, (error) => {
+    fs.writeFile(path.applicationYml, updateYml, (error) => {
         if (error)
             throw error;
-        console.log("Yml atualizado com sucesso!");
+        console.log("path.Yml atualizado com sucesso!");
     });
 }
 
 function updateGulp() {
-    let data = readFile('./files/gulp.js')
+    let data = readFile(path.gulpJs)
     writeGulpJs(data, arg.newVersion)
 }
 
@@ -55,14 +56,14 @@ function writeGulpJs(gulpText, newVersion){
     let updatedGulp = gulpText.replace(
         '\'VERSION\', ' + '\"' + arg.currentVersion + '\"', 
         '\'VERSION\', ' + '\"' + newVersion + '\"');
-    fs.writeFile('./files/gulp.js', updatedGulp, (error) => {
+    fs.writeFile(path.gulpJs, updatedGulp, (error) => {
         if(error) throw error;
         console.log("Gulp atualizando com sucesso!")
     })
 }
 
 function updateConstants(){
-    let constantsText = readFile('./files/constants.java');
+    let constantsText = readFile(path.constantsJava);
     writeConstants(constantsText, arg.newVersion);
 }
 
