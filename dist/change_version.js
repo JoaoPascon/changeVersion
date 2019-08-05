@@ -4,7 +4,7 @@ const argv = require("yargs");
 const arg = argv.alias('newVersion', 'nv')
     .alias('currentVersion', 'cv')
     .demand(['newVersion', 'currentVersion']).argv;
-const currentBrand = 'ciranda';
+const currentBrand = 'cr';
 function newVersionIsCorrect() {
     if (arg.currentVersion > arg.newVersion) {
         throw console.error(`A nova versão é menor que é atual versão, 
