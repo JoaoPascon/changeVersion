@@ -1,7 +1,10 @@
 const allFiles = require('./paths').files;
 const fs = require("fs");
 const argv = require("yargs");
-const arg = argv.demand(['newVersion', 'currentVersion']).argv;
+const arg = argv.alias('newVersion', 'nv')
+    .alias('currentVersion', 'cv')
+    .demand(['newVersion', 'currentVersion']).argv;
+const currentBrand = 'ciranda';
 function newVersionIsCorrect() {
     if (arg.currentVersion > arg.newVersion) {
         throw console.error(`A nova versão é menor que é atual versão, 
@@ -29,16 +32,18 @@ function testFile(text, regexFn) {
     return text.indexOf(regexFn(arg.currentVersion)) >= 0;
 }
 function replaceFile(file) {
-    if (testFile(file.dataText, file.regex)) {
-        file.dataText = file.dataText.replace(file.regex(arg.currentVersion), file.regex(arg.newVersion));
+    if (testFile(file.dataText, file.regexForReplace)) {
+        file.dataText = file.dataText.replace(file.regexForReplace(arg.currentVersion), file.regexForReplace(arg.newVersion));
     }
     else {
         throw console.error(`A versão do arquivo não foi encontrada, ARQUIVO: ${file.name}`);
     }
 }
+function getFilesForCurrentBrand(file) {
+    return file.brands.indexOf(currentBrand) >= 0;
+}
 function updateFiles() {
-    newVersionIsCorrect();
-    let filesToBrand = allFiles;
+    let filesToBrand = allFiles.filter(getFilesForCurrentBrand);
     let files = findFiles(filesToBrand);
     files.forEach(file => replaceFile(file));
     files.forEach(file => writeFile(file));
